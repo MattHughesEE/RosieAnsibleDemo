@@ -1,0 +1,11 @@
+---
+- name: Check Nginx is present
+  hosts: all
+  become: true
+  
+  tasks:
+  - name: Install nginx
+    apt:
+      state: present
+      name: nginx
+    become: true
