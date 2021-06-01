@@ -1,0 +1,6 @@
+- name: Testing Hosts
+  hosts: all
+  tasks:
+    - name: Hello Test
+      debug:
+        msg: "Cubs 0 --- 8 Braves :( /BUT/ Astros 2 --- 1 Rangers :)"
