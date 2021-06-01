@@ -7,7 +7,8 @@
     key_name: Mattest
     aws_region: us-east-1
     aws_instance_type: t2.micro
-    aws_ami: ami-0d5eff06f840b45e9
+    aws_ami: ami-0747bdcabd34c712a
+    #aws_ami: ami-0d5eff06f840b45e9
     #aws_ami: ami-09e67e426f25ce0d7
     #aws_ami: ami-0cd3dfa4e37921605
     #aws_ami: ami-04be6a27b0206807f
