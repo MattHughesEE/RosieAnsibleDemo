@@ -1,0 +1,66 @@
+---
+- name: Provisioning ec2 instance
+  hosts: localhost
+  connection: local
+  vars:
+    Instance_name: RosieTest
+    key_name: Mattest
+    aws_region: us-east-1
+    aws_instance_type: t2.micro
+    aws_ami: ami-09e67e426f25ce0d7
+    #aws_ami: ami-0cd3dfa4e37921605
+    #aws_ami: ami-04be6a27b0206807f
+    subnet: subnet-2786ee41
+    Business_Serv: BusService
+    App_Name: ROSIETestApp
+    Environment: DEV
+    Owner_Name: JSMITH
+    Patch_Group: Patch1
+    aws_account_id: 673626449192
+    instance_count: 1
+    volume_size: 10
+  #vars_file: 
+    #- /vars/ec2_win_create_vars.yml
+  tasks:
+  - name: Launch ec2 Instance and attach a volume. Register the output.
+    ec2:
+      key_name: "{{ key_name }}"
+      region: "{{ aws_region }}"
+      #group: databases
+      instance_type: "{{ aws_instance_type }}" 
+      image: "{{ aws_ami }}"
+      wait: yes
+      #wait_timeout: 500
+      count: "{{ instance_count }}"
+      vpc_subnet_id: "{{ subnet }}"
+      assign_public_ip: yes
+      instance_tags:
+         BusinessService: "{{ Business_Serv }}"
+         Application: "{{ App_Name }}"
+         Env: "{{ Environment }}"
+         Name: "{{ Instance_name }}"
+         Owner: "{{ Owner_Name }}"
+         Patch Group: "{{ Patch_Group }}"
+      volumes:
+        - device_name: /dev/xvda
+          volume_type: gp2
+          volume_size: "{{ volume_size }}"
+          delete_on_terminiation: true
+    register: ec2result
+   
+  - debug:
+      var=ec2result
+   
+  - debug:
+      var=ec2result.instances[0].block_device_mapping["/dev/xvda"].volume_id
+      
+  - name: Add tags to Volume
+    ec2_tag:
+      region: "{{ aws_region }}"
+      resource: "{{ ec2result.instances[0].block_device_mapping['/dev/xvda'].volume_id }}"
+      state: present
+      tags:
+        Name: "{{ App_Name }}"
+        Drive: root
+        Env: "{{ Environment }}"
+        Name: "{{ Instance_name }}"
