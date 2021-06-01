@@ -8,4 +8,4 @@
     apt:
       state: present
       name: nginx
-      become: true
+    become: true
