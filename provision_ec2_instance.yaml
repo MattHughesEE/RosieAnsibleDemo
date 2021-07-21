@@ -28,7 +28,7 @@
     ec2:
       key_name: "{{ key_name }}"
       region: "{{ aws_region }}"
-      group: webservers
+      group: webserver
       instance_type: "{{ aws_instance_type }}" 
       image: "{{ aws_ami }}"
       wait: yes
